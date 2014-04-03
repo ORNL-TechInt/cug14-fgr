@@ -1,6 +1,6 @@
 # CUG14 FGR paper repo
 
-## To generated pdf
+## To generate pdf
 
     make 
 
