@@ -4,8 +4,7 @@ Here is the current outline along with an arbitratily designated person:
 
   * Abstract - Already written
   * Background - Sarp
-  * Motivation - Dustin, Jason, Matt
-  * Goals - Dustin, Jason, Matt
+  * Motivation and Goals - Dustin, Jason, Matt
   * Placement - Matt
   * FGR - Devesh and Feiyi
   * Issues - Feiyi
