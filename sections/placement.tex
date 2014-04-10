@@ -21,7 +21,28 @@ halved the Y-dimension length.  Additionally, Y-dimension connections are
 comprised of only half the links of X- and Z-dimension connections.  Thus, I/O
 traffic should be limited in the Y-dimension due to its reduced relative
 bandwidth. This suggests that routing zones should be ``flattened'' into
-``rectangular prism'' zones instead of the more traditional cubic zones.
+``rectangular prisms'' instead of the more traditional cubic zones.
+
+Paper in \cite{interconnect}
+
+Minimizing the hop count between clients and routers is essential for providing
+high-bandwidth communications with the storage servers.  While Gemini routing
+arbitration is locally fair, it is globally unfair.  Packet age and hop-count
+are not taken into account when the router selects the next packet to forward.
+Figure \ref{fig:geombw} shows an example of this issue.
+
+Node 0 can be considered an I/O router while the others are acting as clients
+attempting to send data to te router.  When only node 0 is communicating, it is
+able to achieve 100\% of the bandwidth across the link.  Once node 2 starts
+communicating, the router attached to node 1 accepts half the bandwidth from
+node 1 and half from node 2.  Effectively, the bandwidth is shared between the
+nodes.  When node 3 begins communicating, the router attached to node 2 fairly
+arbitrates traffic between nodes 2 and 3.  Since that router only has half of
+the global bandwith, nodes 2 and 3 each only get one quarter of the total
+bandwith.  When node 4 begins communicating, the problem becomes even more
+obvious.  The router attached to node 3 fairly arbitrates traffic between nodes
+3 and 4, but it can only grant one eighth of the total bandwidth to each.
+
 
 \begin{figure}[h]
   \centering
@@ -83,6 +104,8 @@ bandwidth. This suggests that routing zones should be ``flattened'' into
   \caption{Geometric Bandwidth Reductions}\label{fig:geombw}
 \end{figure}
 
+As these chains get longer and longer, the bandwidth available to the ``last''
+node can become abysmal.
 
 Minimize torus congestion
 
