@@ -46,61 +46,7 @@ obvious.  The router attached to node 3 fairly arbitrates traffic between nodes
 
 \begin{figure}[h]
   \centering
-  \begin{tikzpicture}
-    \def \phase {1}
-    \node[draw, circle, minimum height=1cm] at (0,-\phase){$0$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (1.5,-\phase){$1$};
-    \node[draw, circle, minimum height=1cm] at (3,-\phase){$2$};
-    \node[draw, circle, minimum height=1cm] at (4.5,-\phase){$3$};
-    \node[draw, circle, minimum height=1cm] at (6,-\phase){$4$};
-    \draw[->, >=latex] (1.0,-\phase) to (0.5,-\phase);
-    \draw[->, >=latex] (2.5,-\phase) to (2.0,-\phase);
-    \draw[->, >=latex] (4.0,-\phase) to (3.5,-\phase);
-    \draw[->, >=latex] (5.5,-\phase) to (5.0,-\phase);
-    \node[draw=none] at (1.5,-1.75) {$\frac{1}{1}$};
-
-    \def \phase {3}
-    \node[draw, circle, minimum height=1cm] at (0,-\phase){$0$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (1.5,-\phase){$1$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (3,-\phase){$2$};
-    \node[draw, circle, minimum height=1cm] at (4.5,-\phase){$3$};
-    \node[draw, circle, minimum height=1cm] at (6,-\phase){$4$};
-    \draw[->, >=latex] (1.0,-\phase) to (0.5,-\phase);
-    \draw[->, >=latex] (2.5,-\phase) to (2.0,-\phase);
-    \draw[->, >=latex] (4.0,-\phase) to (3.5,-\phase);
-    \draw[->, >=latex] (5.5,-\phase) to (5.0,-\phase);
-    \node[draw=none] at (1.5,-3.75) {$\frac{1}{2}$};
-    \node[draw=none] at (3,-3.75) {$\frac{1}{2}$};
-
-    \def \phase {5}
-    \node[draw, circle, minimum height=1cm] at (0,-\phase){$0$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (1.5,-\phase){$1$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (3,-\phase){$2$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (4.5,-\phase){$3$};
-    \node[draw, circle, minimum height=1cm] at (6,-\phase){$4$};
-    \draw[->, >=latex] (1.0,-\phase) to (0.5,-\phase);
-    \draw[->, >=latex] (2.5,-\phase) to (2.0,-\phase);
-    \draw[->, >=latex] (4.0,-\phase) to (3.5,-\phase);
-    \draw[->, >=latex] (5.5,-\phase) to (5.0,-\phase);
-    \node[draw=none] at (1.5,-5.75) {$\frac{1}{2}$};
-    \node[draw=none] at (3,-5.75) {$\frac{1}{4}$};
-    \node[draw=none] at (4.5,-5.75) {$\frac{1}{4}$};
-
-    \def \phase {7}
-    \node[draw, circle, minimum height=1cm] at (0,-\phase){$0$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (1.5,-\phase){$1$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (3,-\phase){$2$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (4.5,-\phase){$3$};
-    \node[draw, circle, minimum height=1cm, color=white, fill=black] at (6,-\phase){$4$};
-    \draw[->, >=latex] (1.0,-\phase) to (0.5,-\phase);
-    \draw[->, >=latex] (2.5,-\phase) to (2.0,-\phase);
-    \draw[->, >=latex] (4.0,-\phase) to (3.5,-\phase);
-    \draw[->, >=latex] (5.5,-\phase) to (5.0,-\phase);
-    \node[draw=none] at (1.5,-7.75) {$\frac{1}{2}$};
-    \node[draw=none] at (3,-7.75) {$\frac{1}{4}$};
-    \node[draw=none] at (4.5,-7.75) {$\frac{1}{8}$};
-    \node[draw=none] at (6,-7.75) {$\frac{1}{8}$};
-  \end{tikzpicture}
+  \input{figures/geombw}
   \caption{Geometric Bandwidth Reductions}\label{fig:geombw}
 \end{figure}
 
@@ -129,5 +75,14 @@ Swizzle to spread Gemini load
 
 \subsection{Implementation}
 
-
+\begin{figure*}[!h]
+  \newcommand{\barec}[1]{\multicolumn{1}{c}{#1}}
+  \begin{center}
+    \include{figures/jaguarplacement}
+    \caption{Jaguar Layout}
+    \vspace{5mm}
+    \include{figures/titanplacement}
+    \caption{Titan Layout}
+  \end{center}
+\end{figure*}
 % vim:textwidth=80:
