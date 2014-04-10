@@ -15,15 +15,22 @@ routers topologically through the machine while also minimizing the number of
 cabinets that contained routers. This resulted in a very regular I/O pattern
 that was prone to congestion if I/O traffic was not properly kept localized.
 
-Jaguar's upgrade from Cray's SeaStar interconnect to Gemini changed the
+Details about Gemini's architecture and performance characteristics are
+available in a paper titled ``Understanding the Impact of Interconnect Failures
+on System Operation'' \cite{interconnect} presented at CUG 2013.  Jaguar's
+upgrade from Cray's SeaStar interconnect to Gemini significantly changed the
 network's characteristics.  Each Gemini supports two nodes, which effectively
 halved the Y-dimension length.  Additionally, Y-dimension connections are
 comprised of only half the links of X- and Z-dimension connections.  Thus, I/O
 traffic should be limited in the Y-dimension due to its reduced relative
-bandwidth. This suggests that routing zones should be ``flattened'' into
+bandwidth.  This suggests that routing zones should be ``flattened'' into
 ``rectangular prisms'' instead of the more traditional cubic zones.
 
-Paper in \cite{interconnect}
+Since Gemini uses dimension-ordered-routing, I/O tends to converge to a single
+path as it nears the destination.  Thus, it is important to avoid putting
+routers in the same plane.  This can help avoid congestion, but many-to-one
+communication patterns in a 3D torus will always suffer from some amount of
+congestion.
 
 Minimizing the hop count between clients and routers is essential for providing
 high-bandwidth communications with the storage servers.  While Gemini routing
@@ -43,7 +50,6 @@ bandwith.  When node 4 begins communicating, the problem becomes even more
 obvious.  The router attached to node 3 fairly arbitrates traffic between nodes
 3 and 4, but it can only grant one eighth of the total bandwidth to each.
 
-
 \begin{figure}[h]
   \centering
   \input{figures/geombw}
@@ -52,12 +58,6 @@ obvious.  The router attached to node 3 fairly arbitrates traffic between nodes
 
 As these chains get longer and longer, the bandwidth available to the ``last''
 node can become abysmal.
-
-Minimize torus congestion
-
-GPUs has increased load on network
-
-Congestion avoidance
 
 \subsection{Physical Constraints}
 
