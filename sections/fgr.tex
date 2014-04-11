@@ -1,9 +1,49 @@
 \section{Fine-Grained Routing}
 
-Zones in the network
+With router placement in place, we now face the question that, how does each
+client select which router to minimize communication hops as well as to avoid
+congestion. This section provides an overview on route selection process and
+algorithms. Routers are divided into 9 groups, with each group containing 12
+router modules. We denote a router group with a superscript, and a router
+module in that group with a subscript. For example, the first module in a
+router group $A$ is denoted as $R^A_1$ so on and so forth. The following
+algorithm describe the core idea of selection process. The input is a given
+router group and client ID, the output is a triple: primary router and two back
+up routers.
 
-Return traffic routing
+\begin{algorithmic}[1]
+\Procedure {Route Selection Algorithm }{$R^x$, $C$} \\ \hrulefill
 
-FGR scripts
+\State Divide $R^x$ into 4 sub-groups: $R^x(1)$ \ldots $R^x(4)$.
+
+\ForAll{sub-groups $R^x(i)$}
+    \State $C_y$ $\leftarrow$ y coordinate of $C$
+    \State $R$ $\leftarrow$ first router module in current sub group
+    \State $R_y$ $\leftarrow$ y coordinate of $R$
+    \If{$C_y == R_y-1$ or $C_y == R_y$ or \\
+       \hspace{\algorithmicindent} \hspace{\algorithmicindent} $C_y == R_y + 1$ or $C_y == R_y + 2$}
+    \State break with subgroup $i$ selected
+    \EndIf
+\EndFor
+
+\State $i$ $\leftarrow$ index of selected sub group
+\State $r_1, r_2, r_3$ $\leftarrow$ first, second, and third router module 
+\State \hspace{\algorithmicindent} selected subgroup $i$
+
+\ForAll{$r_1, r_2, r_3$}
+    \State $d_i$ $\leftarrow$ dist($C, r_i$) \Comment{distance along $X$ dimension}
+    \State primary router module $\leftarrow$ min($d_i$)
+\EndFor
+
+\EndProcedure
+\\\hrulefill
+\end{algorithmic}
+
+
+%Zones in the network
+
+%Return traffic routing
+
+%FGR scripts
 
 % vim:textwidth=80:
