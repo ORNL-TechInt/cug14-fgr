@@ -13,13 +13,13 @@ aggregation switches.
 After deployment, it was discovered that network congestion both at the Cray
 SeaStar and InfiniBand networks were severely limiting aggregate I/O
 performance. To solve this problem, OLCF developed and implemented a congestion
-avoidance method named Fine Grained Routing (FGR). FGR had two components.
-First, it paired clients to specific I/O servers that are topologically close
-to each other, reducing the load on the common SeaStar torus links and avoiding
-SeaStar link saturation. Second, FGR introduced a new LNET routing
-configuration. This new configuration assigned varying weights to LNET routes
-based on client I/O server pairings. Our tests showed that with FGR, we were
-able to boost aggregate performance by %\30.   
+avoidance method named Fine-Grained Routing (FGR)~\cite{dillow-fgr}. FGR had
+two components.  First, it paired clients to specific I/O servers that are
+topologically close to each other, reducing the load on the common SeaStar
+torus links and avoiding SeaStar link saturation. Second, FGR introduced a new
+LNET routing configuration. This new configuration assigned varying weights to
+LNET routes based on client I/O server pairings. Our tests showed that with
+FGR, we were able to boost aggregate performance by %\30.   
  
 Jaguar was upgraded to Titan in 2012. Titan has 18,688 clients, same with
 Jaguar. However, each Titan node is augmented NVIDIA Kepler GPGPUs which
@@ -35,7 +35,7 @@ non-overlapping sections and each is formatted as a separate name space (Atlas
 configured as Lustre LNET routers. Of these, 432 is used for file I/O and 8 is
 for meta data I/O.  On the server side, each OSS is connected to two InfiniBand
 FDR top-of-the-rack (TOR) switches, for reliability. Titan LNET routers also
-directly connect to theTOR switches.   
+directly connect to the TOR switches.   
 
  
 
