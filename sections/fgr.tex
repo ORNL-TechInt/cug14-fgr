@@ -13,17 +13,21 @@ domain is divided into 9 groups. Each group is further divided into 4 sub-group.
 is, each domain has a total of 108 routers, divided into total 9 groups and 36 sub-groups.
 
 Algorithm
-Algorithm~\ref{algo:fgr} describes.
+Algorithm~\ref{alg:fgr} describes.
 
 The $i^{th}$ router in the $G^{th}$ group and $S^{th}$ sub-group within that  $G^{th}$ group is denoted as $R^G_{i}(S)$. Based on 
 our previous discussion, we can infer that $G$, $S$ and $i$ will have following respective ranges: ($1, \dots, 12$), ($1, \dots, 4$), 
 and ($1, \dots, 3$).
 
 
-\begin{algorithmic}[1]
-\label{algo:fgr}
-\Procedure {Route Selection Algorithm }{$R^x$, $C$} \\ \hrulefill
 
+
+\begin{algorithm}
+\caption{Fine-grained routing algorithm}
+\label{alg:fgr}
+\begin{algorithmic}[1]
+\Procedure {Route Selection Algorithm }{$R^x$, $C$} \\ 
+%\hrulefill
 \State Divide $R^x$ into 4 sub-groups: $R^x(1)$ \ldots $R^x(4)$.
 
 \ForAll{subgroups $R^x(i)$}
@@ -36,20 +40,6 @@ and ($1, \dots, 3$).
     \EndIf
 \EndFor
 
-
-With router placement in place, we now face the question that, how does each
-client select which router to minimize communication hops as well as to avoid
-congestion. This section provides an overview on route selection process and
-algorithms. Routers are divided into 9 groups, with each group containing 12
-router modules. We denote a router group with a superscript, and a router
-module in that group with a subscript. For example, the first module in a
-router group $A$ is denoted as $R^A_1$ so on and so forth. The following
-algorithm describe the core idea of selection process. The input is a given
-router group and client ID, the output is a triple: primary router and two back
-up routers.
-
-
-
 \State $i$ $\leftarrow$ index of selected subgroup
 \State $r_1, r_2, r_3$ $\leftarrow$ first, second, and third router module 
 \State \hspace{\algorithmicindent} selected subgroup $i$
@@ -60,11 +50,24 @@ up routers.
     \State backup router modules $\leftarrow$ 
     \IndState{0} two other modules in the subgroup 
 \EndFor
-
 \EndProcedure
-\\\hrulefill
+\\
+%\hrulefill
 \end{algorithmic}
+\end{algorithm}
 
+\begin{comment}
+With router placement in place, we now face the question that, how does each
+client select which router to minimize communication hops as well as to avoid
+congestion. This section provides an overview on route selection process and
+algorithms. Routers are divided into 9 groups, with each group containing 12
+router modules. We denote a router group with a superscript, and a router
+module in that group with a subscript. For example, the first module in a
+router group $A$ is denoted as $R^A_1$ so on and so forth. The following
+algorithm describe the core idea of selection process. The input is a given
+router group and client ID, the output is a triple: primary router and two back
+up routers.
+\end{comment}
 
 %Zones in the network
 
