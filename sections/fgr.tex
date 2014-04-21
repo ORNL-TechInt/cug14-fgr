@@ -12,14 +12,17 @@ These 432 LNET routers are divided into four domains, so each domain has 108 rou
 domain is divided into 9 groups. Each group is further divided into 4 sub-group. Each sub-group consists of has 3 LNET routers. That 
 is, each domain has a total of 108 routers, divided into total 9 groups and 36 sub-groups.
 
-Algorithm
-Algorithm~\ref{alg:fgr} describes.
+\cb{Devesh: need to describe why 4 and 9? it is because of corresponding rows and columns of DDN storage racks?}
 
-The $i^{th}$ router in the $G^{th}$ group and $S^{th}$ sub-group within that  $G^{th}$ group is denoted as $R^G_{i}(S)$. Based on 
+Algorithm~\ref{alg:fgr} describes how a client chooses the closet LNET router. Before we describe the algorithm in detail, we first
+describe how a particular router is denoted in our algorithm depending on its association with a particular group and subgroup. The 
+$i^{th}$ router in the $G^{th}$ group and $S^{th}$ sub-group within that $G^{th}$ group is denoted as $R^G_{i}(S)$. Based on 
 our previous discussion, we can infer that $G$, $S$ and $i$ will have following respective ranges: ($1, \dots, 12$), ($1, \dots, 4$), 
 and ($1, \dots, 3$).
 
-
+The algorithm takes two input parameters: first, coordinates of the client ($C$) and second, the group it belongs to ($R^x$). \cb{Devesh: need to add 
+how do we decide a node's corresponding group id?}. The algorithm returns the coordinates of three routers assigned to the input client ($C$),
+one primary and two backup routers.
 
 
 \begin{algorithm}
