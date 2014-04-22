@@ -15,22 +15,22 @@ is, each domain has a total of 108 routers, divided into total 9 groups and 36 s
 \cb{Devesh: need to describe why 4 and 9? it is because of corresponding rows and columns of DDN storage racks?}
 
 Algorithm~\ref{alg:fgr} describes how a client chooses the closet LNET router. Before we describe the algorithm in detail, we first
-describe how a particular router is denoted in our algorithm depending on its association with a particular group and subgroup. The 
+describe how a particular router is denoted in our algorithm depending on its association with a particular group and sub-group. The 
 $i^{th}$ router in the $G^{th}$ group and $S^{th}$ sub-group within that $G^{th}$ group is denoted as $R^G_{i}(S)$. Based on 
 our previous discussion, we can infer that $G$, $S$ and $i$ will have following respective ranges: ($1, \dots, 12$), ($1, \dots, 4$), 
 and ($1, \dots, 3$).
 
-The algorithm takes two input parameters: first, coordinates of the client ($C$) and second, the group it belongs to ($R^x$). \cb{Devesh: need to add 
+The algorithm takes two input parameters: first, coordinates of the client ($C$) and second, the group it belongs to ($R^G$). \cb{Devesh: need to add 
 how do we decide a node's corresponding group id?}. The algorithm returns the coordinates of three routers assigned to the input client ($C$),
 one primary and two backup routers.
 
-Our fine-grained algorithm consists of two steps. The first step (line~\ref{first:begin}--\ref{first:end}) is to choose the subgroup whose 
+Our fine-grained algorithm consists of two steps. The first step (line~\ref{first:begin}--\ref{first:end}) is to choose the sub-group whose 
 Y-coordinates fall within the close range of Y-coordinates of the input client, $C$. This is because bandwidth in the Y-direction is limited
 compared to other directions, as discussed earlier. Therefore, it is desirable to minimize the traffic in that direction first. \cb{Devesh: I 
 guess the intuition is correct. need to double check with Feiyi. How the range is decided?}
 
-Once the subgroup is selected, the second step (line~\ref{second:begin}--\ref{second:end}) to return assigned routers from this sub-group.
-As mentioned earlier, each subgroup consists of 3 routers and the algorithm returns a vector of 3 routers. So, all three of them are 
+Once the sub-group is selected, the second step (line~\ref{second:begin}--\ref{second:end}) to return assigned routers from this sub-group.
+As mentioned earlier, each sub-group consists of 3 routers and the algorithm returns a vector of 3 routers. So, all three of them are 
 returned, but the one with the lowest distance in X-dimension is assigned as the primary router to minimize the hops and avoid congestion 
 in that direction. \cb{Devesh: Why we don't choose Z direction?.}
 
@@ -43,19 +43,21 @@ in that direction. \cb{Devesh: Why we don't choose Z direction?.}
 %\hrulefill
 \State Divide $R^G$ into 4 sub-groups: $R^G(1)$ \ldots $R^G(4)$.
 
-\ForAll{subgroups $R^G(S)$}
+\ForAll{sub-groups $R^G(i)$} \Comment{$i$ ranges 1 to 4}
 \label{first:begin}
     \State $C[y]$ $\leftarrow$ y coordinate of $C$
-    \State $R^G_{i}(S)$ $\leftarrow$ first router module in current sub-group
-    \State $R^G_{i}(S)[y]$ $\leftarrow$ y coordinate of $R^G_{i}(S)$
-    \If{ ($C[y] == R^G_{i}(S)[y]-1$) 
-    \\ \hspace{\algorithmicindent} \hspace{\algorithmicindent}   or ($C[y] == R^G_{i}(S)[y]$)
-    \\ \hspace{\algorithmicindent} \hspace{\algorithmicindent}   or ($C[y] == R^G_{i}(S)[y] + 1$) 
-    \\ \hspace{\algorithmicindent} \hspace{\algorithmicindent}   or ($C[y] == R^G_{i}(S)[y] + 2$)}
+    \State $R^G_{1}(i)$ $\leftarrow$ first router module in the $i^{th}$ sub-group
+    \State $R^G_{1}(i)[y]$ $\leftarrow$ y coordinate of $R^G_{i}(S)$
+    \If{ ($C[y] == R^G_{1}(i)[y]-1$) 
+    \\ \hspace{\algorithmicindent} \hspace{\algorithmicindent}   or ($C[y] == R^G_{1}(i)[y]$)
+    \\ \hspace{\algorithmicindent} \hspace{\algorithmicindent}   or ($C[y] == R^G_{1}(i)[y] + 1$) 
+    \\ \hspace{\algorithmicindent} \hspace{\algorithmicindent}   or ($C[y] == R^G_{1}(i)[y] + 2$)}
     \State break with sub-group $i$ selected
     \EndIf
 \EndFor
 \label{first:end}
+
+\\ 
 
 \State $i$ $\leftarrow$ index of selected sub-group
 \label{second:begin}
@@ -65,6 +67,8 @@ in that direction. \cb{Devesh: Why we don't choose Z direction?.}
 \State $d_{min}$ $\leftarrow$ $\infty$ 
 \State $Index_{primary}$ $\leftarrow$ $\infty$
 
+\\
+
 \For{$j$ in $1, \dots, 3$}
     \State $d_{current}$ $\leftarrow$ dist($C[x], r_j[x]$) \Comment{distance along $X$ dimension}
         \If{$d_{current}$ $<$ $d_{min}$}
@@ -73,12 +77,14 @@ in that direction. \cb{Devesh: Why we don't choose Z direction?.}
 
 %    \State primary router module $\leftarrow$ min($d_min$)
 %    \State backup router modules $\leftarrow$ 
-%    \IndState{0} two other modules in the subgroup 
+%    \IndState{0} two other modules in the sub-group 
 \EndFor
 
     \State primary router module $\leftarrow$ $R^G_{Index_{primary}}(i)$
     \State backup router modules $\leftarrow$ 
-    \IndState{0} two other modules in the $i^{th}$ subgroup
+    \IndState{0} two other modules in the $i^{th}$ sub-group
+
+    \Return $<$primary and backup router modules$>$ \\ 
 
 \label{second:end}
 
