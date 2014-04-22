@@ -48,8 +48,10 @@ in that direction. \cb{Devesh: Why we don't choose Z direction?.}
     \State $C[y]$ $\leftarrow$ y coordinate of $C$
     \State $R^G_{i}(S)$ $\leftarrow$ first router module in current sub-group
     \State $R^G_{i}(S)[y]$ $\leftarrow$ y coordinate of $R^G_{i}(S)$
-    \If{$C[y] == R^G_{i}(S)[y]-1$ or $C[y] == R^G_{i}(S)[y]$ or \\
-       \hspace{\algorithmicindent} \hspace{\algorithmicindent} $C[y] == R^G_{i}(S)[y] + 1$ or $C[y] == R^G_{i}(S)[y] + 2$}
+    \If{ ($C[y] == R^G_{i}(S)[y]-1$) 
+    \\ \hspace{\algorithmicindent} \hspace{\algorithmicindent}   or ($C[y] == R^G_{i}(S)[y]$)
+    \\ \hspace{\algorithmicindent} \hspace{\algorithmicindent}   or ($C[y] == R^G_{i}(S)[y] + 1$) 
+    \\ \hspace{\algorithmicindent} \hspace{\algorithmicindent}   or ($C[y] == R^G_{i}(S)[y] + 2$)}
     \State break with sub-group $i$ selected
     \EndIf
 \EndFor
