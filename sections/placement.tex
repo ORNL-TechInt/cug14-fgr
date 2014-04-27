@@ -1,19 +1,32 @@
 \section{Placement}
 
 The placement of the I/O routers in a large 3D torus can have an enormous impact
-on the traffic patterns and congestions characteristics present in the system.
+on the traffic patterns and congestion characteristics present in the system.
 This is important for maximizing I/O performance as well as minimizing the
 interaction between application communication and I/O. Building on the lessons
-learned from OLCF's Spider I implementation of fine-grained routing in 2008, an
+learned from OLCF's Spider~I implementation of fine-grained routing in 2008, an
 improved method for placing LNET routers on Titan was developed and implemented
-for Spider II.
+for Spider~II.
+
+\begin{figure*}[!h]
+  \newcommand{\barec}[1]{\multicolumn{1}{c}{#1}}
+  \begin{center}
+    \include{figures/jaguarplacement}
+    \caption{Jaguar Layout}\label{fig:jaglayout}
+    \vspace{5mm}
+    \include{figures/titanplacement}
+    \caption{Titan Layout}\label{fig:titanlayout}
+  \end{center}
+\end{figure*}
 
 \subsection{Topological Concerns}
+\label{sec:topo}
 
-The router placement layout used for Spider I was designed to distribute the
+The router placement layout used for Spider~I was designed to distribute the
 routers topologically through the machine while also minimizing the number of
-cabinets that contained routers. This resulted in a very regular I/O pattern
-that was prone to congestion if I/O traffic was not properly kept localized.
+cabinets that contained routers (see Figure \ref{fig:jaglayout}). This resulted
+in a very regular I/O pattern that was prone to congestion if I/O traffic was
+not properly kept localized.
 
 Details about Gemini's architecture and performance characteristics are
 available in a paper titled ``Understanding the Impact of Interconnect Failures
@@ -38,51 +51,67 @@ arbitration is locally fair, it is globally unfair.  Packet age and hop-count
 are not taken into account when the router selects the next packet to forward.
 Figure \ref{fig:geombw} shows an example of this issue.
 
-Node 0 can be considered an I/O router while the others are acting as clients
-attempting to send data to te router.  When only node 0 is communicating, it is
-able to achieve 100\% of the bandwidth across the link.  Once node 2 starts
-communicating, the router attached to node 1 accepts half the bandwidth from
-node 1 and half from node 2.  Effectively, the bandwidth is shared between the
-nodes.  When node 3 begins communicating, the router attached to node 2 fairly
-arbitrates traffic between nodes 2 and 3.  Since that router only has half of
-the global bandwith, nodes 2 and 3 each only get one quarter of the total
-bandwith.  When node 4 begins communicating, the problem becomes even more
-obvious.  The router attached to node 3 fairly arbitrates traffic between nodes
-3 and 4, but it can only grant one eighth of the total bandwidth to each.
-
 \begin{figure}[h]
   \centering
   \input{figures/geombw}
   \caption{Geometric Bandwidth Reductions}\label{fig:geombw}
 \end{figure}
 
+Node 0 can be considered an I/O router while the others are acting as clients
+attempting to send data to the router.  When only node 0 is communicating, it
+is able to achieve 100\% of the bandwidth across the link.  Once node 2 starts
+communicating, the router attached to node 1 accepts half the bandwidth from
+node 1 and half from node 2.  Effectively, the bandwidth is shared between the
+nodes.  When node 3 begins communicating, the router attached to node 2 fairly
+arbitrates traffic between nodes 2 and 3.  Since that router only has half of
+the global bandwith, nodes 2 and 3 each only get one quarter of the total
+bandwith to the router.  When node 4 begins communicating, the problem becomes
+even more obvious.  The router attached to node 3 fairly arbitrates traffic
+between nodes 3 and 4, but it can only grant one eighth of the total bandwidth
+to each.
+
 As these chains get longer and longer, the bandwidth available to the ``last''
 node can become abysmal.
 
 \subsection{Physical Constraints}
 
-As part of the Spider II upgrade, the number of LNET routers on Titan was
-doubled to 440 nodes and each router was equipped with an IB FDR HCA with 16
-PCI-E lanes running at Gen-2.
 
-Ensure full routability to boot from both ends
+The following physical constraints and goals were kept in mind while
+determining an optimal placement algorithm:
 
-Balance router usage
-
-Minimize Pinging
-
-Swizzle to spread Gemini load
+\begin{description}
+  \item[Topological Concerns] \hfill \\
+    Routers must be placed to optimize for the topological concerns mentioned
+    in Section \ref{sec:topo}.
+  \item[Minimize Cabinet Count] \hfill \\
+    Each cabinet that contains a router module requires a hole to be drilled in
+    the floor to accomodate the cables.
+  \item[Cable Length] \hfill \\
+    Shorter cables are cheaper and easier to manage in the data center.
+  \item[Partitionability] \hfill \\
+    Occasionally, Titan's 3D torus must be partitioned to facilitate extended
+    maintenance activites or testing.  During this situation, it is important to
+    ensure full routability to boot from both ``ends'' of the machine.  A boot
+    node is located in physical columns 0 and 24 (topological columns 0 and 13).
+    Thus, routers should be located in a way that minimizes the number of
+    columns required to access the entire file system.
+\end{description}
 
 \subsection{Implementation}
 
-\begin{figure*}[!h]
-  \newcommand{\barec}[1]{\multicolumn{1}{c}{#1}}
-  \begin{center}
-    \include{figures/jaguarplacement}
-    \caption{Jaguar Layout}
-    \vspace{5mm}
-    \include{figures/titanplacement}
-    \caption{Titan Layout}
-  \end{center}
-\end{figure*}
+In the Cray~XK architecture, each service module contains four service nodes.
+Since each service module displaces a compute module, it is important to
+utilize each node.  Ideally, the LNET routers would exist on the same module as
+less bandwidth-intensive nodes (such as a login nodes).  This is unfortunately
+impossible due to the sheer number of routers required to achieve sufficient
+bandwidth.
+
+Having 4 routers on a module matches nicely with the 4 rows of Spider~II.  The
+nodes on a given module will connect to a switch in each of the 4 rows of
+Spider~II.  There is a ``swizzle'' to spread Gemini load.
+
+As part of the Spider~II upgrade, the number of LNET routers on Titan was
+doubled to 440 nodes and each router was equipped with an IB FDR HCA with 16
+PCI-E lanes running at Gen-2.
+
 % vim:textwidth=80:
