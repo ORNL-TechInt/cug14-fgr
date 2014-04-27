@@ -1,14 +1,14 @@
 \section{Background}
 
-Spider file system was designed as a center-wide shared resource to service all
-Oak Ridge Leadership Computing Facility (OLCF) resources, in 2008. The design
-was targeted to eliminate data island, reduce deployment costs, and to increase
-data availability. The system was connected to Jaguar and other OLCF resources
-through an InfiniBand DDR network network, named Scalable I/O network (SION).
-Each OSS was directly connected to two 108 port IB aggregation switches.
-Network translation services from Cray SeaStar to InfiniBand was provided by
-Lustre LNET routers. These routers were also directly connected to the same two
-aggregation switches.    
+The Spider file system was designed as a center-wide shared resource to service
+all Oak Ridge Leadership Computing Facility (OLCF) resources, in 2008. The
+design was targeted to eliminate data islands, to reduce deployment costs, and
+to increase data availability. The system was connected to Jaguar and other
+OLCF resources through an InfiniBand (IB) DDR network network, named Scalable
+I/O network (SION).  Each storage server was directly connected to two 108 port
+IB aggregation switches.  Network translation services from Cray SeaStar to
+InfiniBand was provided by Lustre Networking (LNET) routers. These routers were
+also directly connected to the same two aggregation switches.    
 
 After deployment, it was discovered that network congestion both at the Cray
 SeaStar and InfiniBand networks were severely limiting aggregate I/O
@@ -18,24 +18,30 @@ two components.  First, it paired clients to specific I/O servers that are
 topologically close to each other, reducing the load on the common SeaStar
 torus links and avoiding SeaStar link saturation. Second, FGR introduced a new
 LNET routing configuration. This new configuration assigned varying weights to
-LNET routes based on client I/O server pairings. Our tests showed that with
-FGR, we were able to boost aggregate performance by %\30.   
+LNET routes based on client I/O server pairings. Tests showed that with
+FGR, aggregate performance was boosted by 30\%.   
  
-Jaguar was upgraded to Titan in 2012. Titan has 18,688 clients, same with
-Jaguar. However, each Titan node is augmented NVIDIA Kepler GPGPUs which
-increased the aggregate installed computational power by more than a magnitude.
-This also increased the I/O requirement. To address this a new file system
-called Spider 2 was deployed in 2013. Spider 2 provides 4x increase in
-aggregate I/O performance and 3x in data storage capacity. It has a similar
-architecture to Spider and has 20,160 2 TB Near-Line SAS disks. These are
-organized in 8+2 RAID 6 sets. The storage system is split into two distinct,
-non-overlapping sections and each is formatted as a separate name space (Atlas
-1 and 2). Each file system has 144 Lustre OSSes and 1,008 OSTs. Lustre version
-2.4.2 is running on the I/O servers. On Titan, 440 XK7 service nodes are
-configured as Lustre LNET routers. Of these, 432 is used for file I/O and 8 is
-for meta data I/O.  On the server side, each OSS is connected to two InfiniBand
-FDR top-of-the-rack (TOR) switches, for reliability. Titan LNET routers also
-directly connect to the TOR switches.   
+Jaguar was upgraded to Titan in 2012. Like Jaguar, Titan has 18,688 clients.
+However, each Titan node is augmented with one NVIDIA Kepler GPGPU
+which increased the aggregate installed computational power by more than an
+order of magnitude.  This also increased the I/O requirement. To address this
+need, a new file system called Spider~II was deployed in 2013. Spider~II
+provides a 4x boost in aggregate I/O performance and a 3x increase in data
+storage capacity.
+
+Spider~II was designed with a similar architecture to its predecessor,
+Spider~I.  20,160 2 TB Near-Line SAS disks are organized in 8+2 RAID 6 sets
+controlled by 36 DataDirect Network (DDN) SFA-12K couplets. These are
+physically arranged into four rows in the data center.  The storage system is
+split into two distinct, non-overlapping sections, and each is formatted as a
+separate name space (atlas1 and atlas2). Each file system has 144 Lustre Object
+Storage Servers (OSSs) and 1,008 Object Storage Targests (OSTs). As of
+publication, a patched version of Lustre 2.4.3 is running on the I/O servers.
+Each OSS is connected to one InfiniBand FDR top-of-the-rack (TOR) switch and
+two DDN controllers, for reliability.  On Titan, 440 XK7 service nodes are
+configured as Lustre LNET routers. Of these, 432 are used for file I/O and 8
+are for metadata communicagtion.  On the The Titan LNET routers are directly
+connected to the Spider~II TOR switches.
 
  
 
