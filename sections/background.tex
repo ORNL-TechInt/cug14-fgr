@@ -38,11 +38,28 @@ separate name space (atlas1 and atlas2). Each file system has 144 Lustre Object
 Storage Servers (OSSs) and 1,008 Object Storage Targests (OSTs). As of
 publication, a patched version of Lustre 2.4.3 is running on the I/O servers.
 Each OSS is connected to one InfiniBand FDR top-of-the-rack (TOR) switch and
-two DDN controllers, for reliability.  On Titan, 440 XK7 service nodes are
-configured as Lustre LNET routers. Of these, 432 are used for file I/O and 8
-are for metadata communicagtion.  On the The Titan LNET routers are directly
-connected to the Spider~II TOR switches.
+two DDN controllers, for reliability.  Each row has nine TOR switches (36
+total).  On Titan, 440 XK7 service nodes are configured as Lustre LNET routers.
+Of these, 432 are used for file I/O and 8 are for metadata communicagtion.  On
+the The Titan LNET routers are directly connected to the Spider~II TOR
+switches.  Table~\ref{table:component-counts} shows the quantity of each
+component.
 
- 
+\begin{table}
+ \caption{Spider~II Component Counts}
+ \label{table:component-counts}
+ \begin{tabular}{ | l | c | c | c | c | c | c | }
+  \hline
+  Count per	& Total		& FS		& Row	& SSU	& OSS	& OST	\\ \hline
+  Disks		& 20,160	& 10,080	& 5,040	& 560	& 70	& 10	\\ \hline
+  OSTs		& 2016		& 1008		& 504	& 56	& 7	&	\\ \hline
+  OSSs		& 288		& 144		& 72	& 8	&	&	\\ \hline
+  I/O Routers	& 432		& 216		& 108	& 12	&	&	\\ \hline
+  IB Switches	& 36		& 18		& 9	& 1*	&	&	\\ \hline
+  Rows		& 4		& 2		&	&	&	&	\\ \hline
+  File Systems	& 2		&		&	&	&	&	\\ \hline
+ \end{tabular}
+ *Note: A given switch supports half of each of two SSUs
+\end{table}
 
 % vim:textwidth=80:
