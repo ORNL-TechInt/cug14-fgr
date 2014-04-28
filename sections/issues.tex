@@ -1,7 +1,19 @@
+% vim:textwidth=80:
 \section{Issues}
 
-Differing performance based on topology
+The I/O router placement attempts to address the issue of traffic routing and
+imbalance at system level. The route selection algorithm aims to minimize hops
+and mitigate contention between the compute clients and I/O routers. However,
+two issues remain evident. First of which is, this mitigation and balancing
+strategy extends only to I/O routers, it is \emph{not} a end-to-end complete
+solution. Secondly, the benefits of such placement strategy can only be
+full realized when the whole system is under the control such that only
+selected clients perform I/O on pre-determined targets. 
 
-Libraries to aid users in placement
+Due to aforementioned limitations, we have been working on a end-to-end,
+balanced data placement strategy to complement the backend fine grain routing
+algorithm. The primary goal is to extend the balancing beyond I/O routers and
+into the final destination. This work remains a work in progress though.
 
-% vim:textwidth=80:
+
+
