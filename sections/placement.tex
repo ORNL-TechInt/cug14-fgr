@@ -14,12 +14,6 @@ for Spider~II.
     \caption{Jaguar Layout}\label{fig:jaglayout}
   \end{center}
 \end{figure*}
-\begin{figure*}[t]
-  \begin{center}
-    \includegraphics{figures/titanplacement}
-    \caption{Titan Layout}\label{fig:titanlayout}
-  \end{center}
-\end{figure*}
 
 \subsection{Topological Concerns}
 \label{sec:topo}
@@ -99,21 +93,39 @@ determining an optimal placement algorithm:
     columns required to access the entire file system.
 \end{description}
 
-\subsection{Implementation}
+\subsection{Placement Choices}
 
-In the Cray~XK architecture, each service module contains four service nodes.
+The challenge is to choose the optimal placement for the 432 I/O routers. In
+the Cray~XK architecture, each service module contains four service nodes.
 Since each service module displaces a compute module, it is important to
 utilize each node.  Ideally, the LNET routers would exist on the same module as
-less bandwidth-intensive nodes (such as a login nodes).  This is unfortunately
-impossible due to the sheer number of routers required to achieve sufficient
-bandwidth.
+less bandwidth-intensive nodes (such as a login nodes) to dedicate more
+bandwidth to routing.  This is unfortunately impossible due to the sheer number
+of routers required to achieve sufficient bandwidth.
 
-Having 4 routers on a module matches nicely with the 4 rows of Spider~II.  The
-nodes on a given module will connect to a switch in each of the 4 rows of
-Spider~II.  There is a ``swizzle'' to spread Gemini load.
+Spider~II has 36 InfiniBand switches that are named based on row and position:
+\textit{atlas-ibsw\{1-4\}\{a-i\}}.  Titan's 432 routers are divided equally
+among the switches, with each switch providing 12 connections to Titan.
+Titan's routers are named based on the switch to which they connect and their
+index: \textit{rtr\{1-4\}\{a-i\}-\{1-12\}}.
 
-As part of the Spider~II upgrade, the number of LNET routers on Titan was
-doubled to 440 nodes and each router was equipped with an IB FDR HCA with 16
-PCI-E lanes running at Gen-2.
+Having 4 routers on a module corresponds nicely with the 4 rows of Spider~II.
+The  four nodes on a given module will connect to the same ``letter'' switch in
+each of the 4 rows of Spider~II.  Initially, this was designed such that nodes
+0, 1, 2, and 3 connected to rows 1, 2, 3, and 4, respectively.  Before
+deployment, OLCF staff realized that this connection might be suboptimal.
+Router 0 and 1 share a Gemini, so in the typical use case of a job writing to a
+single file system, contention may be present on the links leading to that
+Gemini.  The placement was modified so nodes 0 and 2 connect to rows 1 and 2
+while nodes 1 and 3 connect to rows 3 and 4.  This ``swizzle'' is designed to
+spread the load for a single file system to two different Gemini chips within a
+module.
+
+\begin{figure*}[t]
+  \begin{center}
+    \includegraphics{figures/titanplacement}
+    \caption{Titan Layout}\label{fig:titanlayout}
+  \end{center}
+\end{figure*}
 
 % vim:textwidth=80:
