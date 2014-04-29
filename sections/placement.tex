@@ -105,7 +105,7 @@ bandwidth to routing.  This is unfortunately impossible due to the sheer number
 of routers required to achieve sufficient bandwidth.
 
 Spider~II has 36 InfiniBand switches that are named based on row and position:
-\textit{atlas-ibsw\{1-4\}\{a-i\}}.  Titan's 432 routers are divided equally
+\textit{atlas-ibsw\{1-4\}\{a-i\}}.  Titan's 432 I/O routers are divided equally
 among the switches, with each switch providing 12 connections to Titan.
 Titan's routers are named based on the switch to which they connect and their
 index: \textit{rtr\{1-4\}\{a-i\}-\{1-12\}}.
@@ -128,10 +128,13 @@ sections of two rows each.  The intention here was to limit hops in the
 Y-direction due to its limited bandwidth.  The 12 modules for a given group
 were assigned to the sections, three per section.  The starting position for
 the first router was manually determined to aid in satisfying physical
-constraints.  The subsequent routers were placed approximately $\frac{1}{3}$
-around the X- and Z-dimensions.  Between sections, the starting X- and
-Z-dimensions are offset.  The final placement map is shown in
-Figure~\ref{fig:titanlayout}.
+constraints.  The subsequent routers in the subgroup were placed approximately
+$\frac{1}{3}$ around the X- and Z-dimensions.  When two modules for different
+groups are placed in the same cabinet, they are offset by 12 in the Z-dimension
+($\frac{1}{2}$ of the way).  Between sections, the starting X- and Z-dimensions
+are offset.  By modifying the starting positions and parameters, several
+iterations were created and evaluated before arriving at a final configuration.
+The final placement map is shown in Figure~\ref{fig:titanlayout}.
 
 \begin{figure*}[t]
   \begin{center}
@@ -139,5 +142,6 @@ Figure~\ref{fig:titanlayout}.
     \caption{Titan Layout}\label{fig:titanlayout}
   \end{center}
 \end{figure*}
+
 
 % vim:textwidth=80:
