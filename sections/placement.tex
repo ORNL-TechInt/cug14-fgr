@@ -24,7 +24,8 @@ cabinets that contained routers (see Figure \ref{fig:jaglayout}). This resulted
 in a very regular I/O pattern that was prone to congestion if I/O traffic was
 not properly kept localized.
 
-Details about Gemini's architecture and performance characteristics are
+Details about Gemini's architecture and design are available in other
+literature \cite{hoti}.  Additional details and performance characteristics are
 available in a paper titled ``Understanding the Impact of Interconnect Failures
 on System Operation'' \cite{interconnect} presented at CUG 2013.  Jaguar's
 upgrade from Cray's SeaStar interconnect to Gemini significantly changed the
@@ -120,6 +121,17 @@ Gemini.  The placement was modified so nodes 0 and 2 connect to rows 1 and 2
 while nodes 1 and 3 connect to rows 3 and 4.  This ``swizzle'' is designed to
 spread the load for a single file system to two different Gemini chips within a
 module.
+
+OLCF staff wrote several \textit{Perl} scripts to generate and analyze the
+placement for the I/O routers.  First, the machine was broken up into 4
+sections of two rows each.  The intention here was to limit hops in the
+Y-direction due to its limited bandwidth.  The 12 modules for a given group
+were assigned to the sections, three per section.  The starting position for
+the first router was manually determined to aid in satisfying physical
+constraints.  The subsequent routers were placed approximately $\frac{1}{3}$
+around the X- and Z-dimensions.  Between sections, the starting X- and
+Z-dimensions are offset.  The final placement map is shown in
+Figure~\ref{fig:titanlayout}.
 
 \begin{figure*}[t]
   \begin{center}
