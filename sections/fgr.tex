@@ -7,32 +7,28 @@ subject to physical constraints and other boundary conditions. This ensures that
 and are not segregated in a particular zone. The second key step is to pair clients with their closet possible LNET router. This 
 section discusses the algorithm that pairs a client with the closet possible LNET router to minimize hop counts and congestion.
 
-Recall that there are a total 440 LNET routers where only 432 routers are used for file I/O and rest 8 are used for meta data I/O.
-Four LNET routers together form a router module, resulting in a total of 108 router modules in the system. These 108 router modules 
-are divided into 9 groups. Each group is further divided into 4 sub-groups. Each sub-group consists of 3 router modules. Therefore, each 
-group consists of 12 router modules.
+Recall that there are a total of 440 LNET routers where only 432 routers are used for file I/O and rest 8 are used for meta 
+data I/O. Four LNET routers together form a router module, resulting in a total of 108 router modules in the system. These 
+108 router modules are divided into 9 groups. Each group is further divided into 4 sub-groups. Each sub-group consists of 3 router modules. Therefore, each group consists of 12 router modules.
 
 %\cb{Devesh: need to describe why 4 and 9? it is because of corresponding rows and columns of DDN storage racks?}
 
-Algorithm~\ref{alg:fgr} describes how a client chooses the closet router module within the assigned group. We note that
-the client to group pairing is decided using a fixed arrangement. Before we describe the algorithm in detail, we first
-describe how a particular router module is denoted in our algorithm depending on its association with a particular group and sub-group. The 
-$i^{th}$ router module in the $G^{th}$ group and $S^{th}$ sub-group is denoted as $R^G_{i}(S)$. Based on 
-our previous discussion, we can infer that $G$, $S$ and $i$ will have following respective ranges: ($1, \dots, 9$), ($1, \dots, 4$), 
+Algorithm~\ref{alg:fgr} describes how a client chooses the closet router module within the assigned group. The 
+client-to-group pairing is decided using a fixed arrangement. Note that in the preseneted algorithm $R^G_{i}(S)$ 
+denotes $i^{th}$ router module in the $G^{th}$ group and $S^{th}$ sub-group. Based on the number of groups, sub-groups, and 
+router modules in the system, $G$, $S$ and $i$ will have the following respective ranges: ($1, \dots, 9$), ($1, \dots, 4$), 
 and ($1, \dots, 3$).
+
+%Before we describe the algorithm in detail, we firstdescribe how 
+%A router module is denoted in our algorithm depending on its association with a particular group and sub-group. The 
+%$i^{th}$ router module in the $G^{th}$ group and $S^{th}$ sub-group is denoted as $R^G_{i}(S)$. 
 
 The algorithm takes two input parameters: first, coordinates of the client ($C$) and second, the group it belongs to ($R^G$). The 
 algorithm returns the coordinates of three routers assigned to the input client ($C$), one primary and two backup routers. 
 
-Our fine-grained algorithm consists of two steps. The first step (line~\ref{first:begin}--\ref{first:end}) is to choose the sub-group whose 
-Y-coordinates fall within the close range of Y-coordinates of the input client, $C$. This is because the bandwidth in the Y-direction is limited
-compared to other directions, as discussed earlier. Therefore, it is desirable to minimize the traffic in that direction first. 
+Fine-grained algorithm consists of two steps. The first step (line~\ref{first:begin}--\ref{first:end}) is to choose the sub-group whose Y-coordinates fall within the close range of Y-coordinates of the input client, $C$. This is because the bandwidth in the Y-direction is limited compared to other directions, as discussed earlier. Therefore, it is desirable to minimize the traffic in that direction first. 
 
-Once the sub-group is selected, the second step (line~\ref{second:begin}--\ref{second:end}) is to return assigned routers from this sub-group.
-As mentioned earlier, each sub-group consists of 3 routers and the algorithm returns a vector of 3 routers. So, all three of them are 
-returned, but the one with the lowest distance in X-dimension is assigned as the primary router to minimize the hops and avoid congestion 
-in that direction. We note that the X-direction crosses cabinet boundaries, therefore it more desirable to minimize the hops in that 
-direction compared to the Z-direction that run within a cabinet in vertical direction.
+Once the sub-group is selected, the second step (line~\ref{second:begin}--\ref{second:end}) is to return assigned routers from this sub-group. As mentioned earlier, each sub-group consists of 3 routers and the algorithm returns a vector of 3 routers. So, all three of them are returned, but the one with the lowest distance in X-dimension is assigned as the primary router to minimize the hops and avoid congestion in that direction. Note that the X-direction crosses cabinet boundaries, therefore it more desirable to minimize the hops in that direction compared to the Z-direction that run within a cabinet in vertical direction.
 
 
 \begin{algorithm}
