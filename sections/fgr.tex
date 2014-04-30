@@ -1,34 +1,56 @@
 \section{Fine-Grained Routing}
 
-%\cb{Devesh: Currently holding lock on this section.: not any more}
+The first step towards achieving higher performance is to place LNET routers
+equidistant from each other as much as possible, subject to physical
+constraints and other boundary conditions. This ensures that LNET routers are
+distributed across the machine and are not segregated in a particular zone. The
+second key step is to pair clients with their closest possible LNET routers.
+This section discusses the algorithm and implementation that pairs a client
+with the optimal LNET routers to minimize hop counts and congestion.
 
-The first step towards achieving higher performance is to place LNET routers equidistant from each other as much as possible,
-subject to physical constraints and other boundary conditions. This ensures that LNET routers are distributed across the machine
-and are not segregated in a particular zone. The second key step is to pair clients with their closet possible LNET router. This 
-section discusses the algorithm that pairs a client with the closet possible LNET router to minimize hop counts and congestion.
+\subsection{Router Selection Algorithm}
+Recall from previous sections that there are a total of 440 LNET routers where
+only 432 routers are used for file I/O; the remaining 8 are used for metadata
+operations. Four LNET routers together form a router module, resulting in a
+total of 108 router modules spread throughout the system. These 108 router
+modules are divided into 9 groups of 12 modules each, corresponding to the 9
+InfiniBand switches present in each row of Spider~II.  Each group is further
+divided into 4 sub-groups that service two rows of Titan. Each sub-group
+consists of 3 router modules.
 
-Recall that there are a total of 440 LNET routers where only 432 routers are used for file I/O and rest 8 are used for meta 
-data I/O. Four LNET routers together form a router module, resulting in a total of 108 router modules in the system. These 
-108 router modules are divided into 9 groups. Each group is further divided into 4 sub-groups. Each sub-group consists of 3 router modules. Therefore, each group consists of 12 router modules.
-
-%\cb{Devesh: need to describe why 4 and 9? it is because of corresponding rows and columns of DDN storage racks?}
-
-Algorithm~\ref{alg:fgr} describes how a client chooses the closet router module within the assigned group. The 
-client-to-group pairing is decided using a fixed arrangement. Note that in the preseneted algorithm $R^G_{i}(S)$ 
-denotes $i^{th}$ router module in the $G^{th}$ group and $S^{th}$ sub-group. Based on the number of groups, sub-groups, and 
-router modules in the system, $G$, $S$ and $i$ will have the following respective ranges: ($1, \dots, 9$), ($1, \dots, 4$), 
-and ($1, \dots, 3$).
+Algorithm~\ref{alg:fgr} describes how a client chooses the optimal router
+module for a given group. The client-to-group pairing is decided using a fixed
+arrangement.  Note that in the presented algorithm $R^G_{i}(S)$ denotes
+$i^{th}$ router module in the $G^{th}$ group and $S^{th}$ sub-group. Based on
+the number of groups, sub-groups, and router modules in the system, $G$, $S$
+and $i$ will have the following respective ranges: ($1, \dots, 9$), ($1, \dots,
+4$), and ($1, \dots, 3$).
 
 %Before we describe the algorithm in detail, we firstdescribe how 
 %A router module is denoted in our algorithm depending on its association with a particular group and sub-group. The 
 %$i^{th}$ router module in the $G^{th}$ group and $S^{th}$ sub-group is denoted as $R^G_{i}(S)$. 
 
-The algorithm takes two input parameters: first, coordinates of the client ($C$) and second, the group it belongs to ($R^G$). The 
-algorithm returns the coordinates of three routers assigned to the input client ($C$), one primary and two backup routers. 
+The algorithm takes two input parameters: coordinates of the client ($C$) and
+the destination router group ($R^G$). The algorithm returns the coordinates of
+three routers assigned to the input client ($C$): one primary and two backup
+routers. 
 
-Fine-grained algorithm consists of two steps. The first step (line~\ref{first:begin}--\ref{first:end}) is to choose the sub-group whose Y-coordinates fall within the close range of Y-coordinates of the input client, $C$. This is because the bandwidth in the Y-direction is limited compared to other directions, as discussed earlier. Therefore, it is desirable to minimize the traffic in that direction first. 
+The fine-grained routing algorithm consists of two steps. The first step
+(line~\ref{first:begin}--\ref{first:end}) is to choose the sub-group whose
+Y-coordinates fall within the close range of Y-coordinates of the input client,
+$C$. This is because the bandwidth in the Y-direction is limited compared to
+other directions, as discussed earlier. Therefore, it is desirable to minimize
+the traffic in that direction first. 
 
-Once the sub-group is selected, the second step (line~\ref{second:begin}--\ref{second:end}) is to return assigned routers from this sub-group. As mentioned earlier, each sub-group consists of 3 routers and the algorithm returns a vector of 3 routers. So, all three of them are returned, but the one with the lowest distance in X-dimension is assigned as the primary router to minimize the hops and avoid congestion in that direction. Note that the X-direction crosses cabinet boundaries, therefore it more desirable to minimize the hops in that direction compared to the Z-direction that run within a cabinet in vertical direction.
+Once the sub-group is selected, the second step
+(line~\ref{second:begin}--\ref{second:end}) is to return assigned routers from
+this sub-group. As mentioned earlier, each sub-group consists of 3 routers and
+the algorithm returns a vector of 3 routers. So, all three of them are
+returned, but the one with the lowest distance in X-dimension is assigned as
+the primary router to minimize the hops and avoid congestion in that direction.
+Note that the X-direction crosses cabinet boundaries, therefore it more
+desirable to minimize the hops in that direction compared to the Z-direction
+that run within a cabinet in vertical direction.
 
 
 \begin{algorithm}
@@ -90,19 +112,50 @@ Once the sub-group is selected, the second step (line~\ref{second:begin}--\ref{s
 \end{algorithmic}
 \end{algorithm}
 
-\begin{comment}
-With router placement in place, we now face the question that, how does each
-client select which router to minimize communication hops as well as to avoid
-congestion. This section provides an overview on route selection process and
-algorithms. Routers are divided into 9 groups, with each group containing 12
-router modules. We denote a router group with a superscript, and a router
-module in that group with a subscript. For example, the first module in a
-router group $A$ is denoted as $R^A_1$ so on and so forth. The following
-algorithm describe the core idea of selection process. The input is a given
-router group and client ID, the output is a triple: primary router and two back
-up routers.
-\end{comment}
+\subsection{LNET Routing}
 
+A quick introduction to LNET routing is helpful to understanding Titan's setup.
+Lustre uses LNET for all communications between clients, routers, and servers.
+Routing allows communication to span multiple network types, as long as one or
+more nodes exist that can ``bridge'' the disjoint networks.  Each unique
+network is given an identifying name that consists of the network type and an
+arbitrary integer (for example, \textit{o2iblnd0} for the $0^{th}$ InfiniBand
+network or \textit{gni101} for the $101^{st}$ Gemini network).
+
+Each node in an LNET network has a unique Network Identifier (NID) that is in
+the form \textit{identifier@network}.  The InfiniBand Lustre Networking Driver
+(LND) uses the IP-over-IB address as its unique identifier
+(ex.~\textit{10.10.10.101@o2iblnd0}), while the Gemini LND uses its Gemini
+network ID (ex.~\textit{4044@gni101}).  It is permissable for a network
+interface to have multiple NIDs assigned to it.  For example, a node with a
+single InfiniBand interface may have NIDs \textit{10.10.10.101@o2ib0},
+\textit{10.10.10.101@o2ib1}, and \textit{10.10.10.101@o2ib2}.  The Lustre
+Manual \cite{lustre-manual} describes how to specify network settings.
+
+In mixed-network environments, system administrators setup the LNET routing
+tables on each node.  For every remote network that the node should be able to
+communicate with, a list of routers should be provided.  Each router is given a
+``hop count'' that indicates the relative distance between the nodes.
+
+When a packet is ready to leave a node, the destination network ID is compared
+to the list of local network IDs.  If a match is found, then the message is
+sent directly to the destination.  Otherwise, the routing table must be used to
+determine the next hop.  Under normal circumstances, LNET will cycle through
+all the appropriate routers with the lowest hop count.  Routers with higher hop
+counts will only be used if \textbf{all} routers of a lower hop count are
+unavailable.
+
+\subsection{FGR in Practice}
+
+Thirty-seven IB LNET network interfaces (NIs) exist that correspond to the 36
+IB leaf switches, plus one for metadata and DVS traffic. Each LNET router has
+exactly one IB NI that corresponds to the switch to which it connects. The
+service and compute nodes are broken up into twelve Gemini regions based on
+their topological location. The clients use this Gemini NI as the source
+address so the Lustre servers return the I/O to a topologically close router in
+the system. Several scripts were developed to calculate the appropriate LNET
+NIs (both IB and Gemini), setup the routes, and verify that the routers are
+cabled correctly.
 %Zones in the network
 
 %Return traffic routing
