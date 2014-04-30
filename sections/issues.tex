@@ -1,19 +1,33 @@
 % vim:textwidth=80:
-\section{Issues}
+\section{Issues and Future Work}
+
+- Differences depending on placement
 
 The I/O router placement attempts to address the issue of traffic routing and
-imbalance at system level. The route selection algorithm aims to minimize hops
-and mitigate contention between the compute clients and I/O routers. However,
-two issues remain evident. First of which is, this mitigation and balancing
-strategy extends only to I/O routers, it is \emph{not} a end-to-end complete
-solution. Secondly, the benefits of such placement strategy can only be
-full realized when the whole system is under the control such that only
-selected clients perform I/O on pre-determined targets. 
+imbalance at the system level. The route selection algorithm aims to minimize
+hops and mitigate contention between the compute clients and I/O routers.
+However, several issues remain.
 
-Due to aforementioned limitations, we have been working on a end-to-end,
-balanced data placement strategy to complement the backend fine grain routing
-algorithm. The primary goal is to extend the balancing beyond I/O routers and
-into the final destination. This work remains a work in progress though.
+Titan's scheduler is completely oblivious to the placement of I/O routers; jobs
+are placed based on node availability.  No mechanism exists for nodes to
+request locality to or distance from I/O routers.  A job placed entirely within
+one section (two rows) of the machine, for example, will never be able to
+achieve greater than $\frac{1}{4}$ of the total file system bandwidth.
+Identical jobs placed in different sections of the machine may have widely
+varying locality to routers.  To users, this manifests as I/O variability.
 
+Benchmark tests against Spider~II have been run using both optimally placed and
+randomly placed clients.  On a quiet system the difference between the two
+modes is minimal.  However, on a busy system the difference can be more
+substantial.  Arbitrary users jobs have no insight into which ranks are closest
+to I/O routers.  To overcome this limitation, OLCF is designing an end-to-end
+balanced data placement strategy to complement the backend fine grained routing
+algorithm. The primary goal is to extend the balancing from the clients,
+through the I/O routers, and into the final destination. This work is ongoing.
 
-
+While the concepts and algorithms behind fine-grained routing are
+straightforward, the actual implementation is quite complex.  When issues
+arise, it can be difficult narrow down to find the root cause.  Over time,
+various scripts have been developed to ensure all nodes are cabled correctly
+and that they can communicate properly.  Additional work improving these
+scripts will aid in timely debugging.
