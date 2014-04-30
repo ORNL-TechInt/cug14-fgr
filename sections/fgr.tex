@@ -143,23 +143,31 @@ sent directly to the destination.  Otherwise, the routing table must be used to
 determine the next hop.  Under normal circumstances, LNET will cycle through
 all the appropriate routers with the lowest hop count.  Routers with higher hop
 counts will only be used if \textbf{all} routers of a lower hop count are
-unavailable.
+unavailable.  In all cases, LNET uses its source NID that matches the network
+of the next hop.
 
 \subsection{FGR in Practice}
 
-Thirty-seven IB LNET network interfaces (NIs) exist that correspond to the 36
-IB leaf switches, plus one for metadata and DVS traffic. Each LNET router has
-exactly one IB NI that corresponds to the switch to which it connects. The
-service and compute nodes are broken up into twelve Gemini regions based on
-their topological location. The clients use this Gemini NI as the source
-address so the Lustre servers return the I/O to a topologically close router in
-the system. Several scripts were developed to calculate the appropriate LNET
-NIs (both IB and Gemini), setup the routes, and verify that the routers are
-cabled correctly.
-%Zones in the network
+Thirty-six IB LNET network identifiers (\textit{o2ib201} to \textit{o2ib236})
+exist that correspond to the 36 IB leaf switches. Each LNET router has exactly
+one IB NI that corresponds to the switch to which it connects.  The service and
+compute nodes are broken up into twelve Gemini regions (\textit{gni101} to
+\textit{gni112}) based on their topological location.  Each router configures 3
+\textit{gni} interfaces corresponding to the three indices in the topological
+section.
 
-%Return traffic routing
+Upon boot, each client applies Algorithm~\ref{alg:fgr} for all groups A to I.
+The node will create a \textit{gni} interface corresponding to each primary
+router.  The primary router is added to the routing table with hop count 1
+while the secondaries are added with hop count 10.  In the end, each client
+will have 36 primary routes (one for each IB switch) and 72 secondary routes.
 
-%FGR scripts
+Additionally, \textit{gni100} is configured on all clients for metadata and
+Cray DVS traffic.  Lustre metadata traffic uses all 8 metadata routers; it does
+not use fine-grained routing.
+
+The Lustre servers each configure one \textit{o2iblnd} network identifier that
+corresponds to its IB leaf switch.  Routes for all 12 \textit{gni} networks are
+configured through the 12 routers also connected to the same switch.
 
 % vim:textwidth=80:
