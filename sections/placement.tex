@@ -61,8 +61,8 @@ communicating, the router attached to node 1 accepts half the bandwidth from
 node 1 and half from node 2.  Effectively, the bandwidth is shared between the
 nodes.  When node 3 begins communicating, the router attached to node 2 fairly
 arbitrates traffic between nodes 2 and 3.  Since that router only has half of
-the global bandwith, nodes 2 and 3 each only get one quarter of the total
-bandwith to the router.  When node 4 begins communicating, the problem becomes
+the global bandwidth, nodes 2 and 3 each only get one quarter of the total
+bandwidth to the router.  When node 4 begins communicating, the problem becomes
 even more obvious.  The router attached to node 3 fairly arbitrates traffic
 between nodes 3 and 4, but it can only grant one eighth of the total bandwidth
 to each.
@@ -82,12 +82,12 @@ determining an optimal placement algorithm:
     in Section \ref{sec:topo}.
   \item[Minimize Cabinet Count] \hfill \\
     Each cabinet that contains a router module requires a hole to be drilled in
-    the floor to accomodate the cables.
+    the floor to accommodate the cables.
   \item[Cable Length] \hfill \\
     Shorter cables are cheaper and easier to manage in the data center.
   \item[Partitionability] \hfill \\
     Occasionally, Titan's 3D torus must be partitioned to facilitate extended
-    maintenance activites or testing.  During this situation, it is important to
+    maintenance activities or testing.  During this situation, it is important to
     ensure full routability to boot from both ``ends'' of the machine.  A boot
     node is located in physical columns 0 and 24 (topological columns 0 and 13).
     Thus, routers should be located in a way that minimizes the number of

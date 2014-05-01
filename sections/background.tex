@@ -37,12 +37,12 @@ controlled by 36 DataDirect Network (DDN) SFA-12K couplets. These are
 physically arranged into four rows in the data center.  The storage system is
 split into two distinct, non-overlapping sections, and each is formatted as a
 separate name space (atlas1 and atlas2). Each file system has 144 Lustre Object
-Storage Servers (OSSs) and 1,008 Object Storage Targests (OSTs). As of
+Storage Servers (OSSs) and 1,008 Object Storage Targets (OSTs). As of
 publication, a patched version of Lustre 2.4.3 is running on the I/O servers.
 Each OSS is connected to one InfiniBand FDR top-of-the-rack (TOR) switch and
 two DDN controllers, for reliability.  Each row has nine TOR switches (36
 total).  On Titan, 440 XK7 service nodes are configured as Lustre LNET routers.
-Of these, 432 are used for file I/O and 8 are for metadata communicagtion.  The
+Of these, 432 are used for file I/O and 8 are for metadata communication.  The
 Titan LNET routers are directly connected to the Spider~II TOR switches.
 Table~\ref{table:component-counts} shows the quantity of each component.  More
 details on Spider~II have been published previously~\cite{atlas}.
