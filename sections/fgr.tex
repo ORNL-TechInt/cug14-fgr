@@ -3,10 +3,10 @@
 The first step towards achieving higher performance is to place LNET routers
 equidistant from each other as much as possible, subject to physical
 constraints and other boundary conditions. This ensures that LNET routers are
-distributed across the machine and are not segregated in a particular zone. The
+distributed across the machine and are not segregated in a particular portion of the torus. The
 second key step is to pair clients with their closest possible LNET routers.
 This section discusses the algorithm and implementation that pairs a client
-with the optimal LNET routers to minimize hop counts and congestion.
+with the optimal LNET routers to minimize end-to-end hop counts and congestion.
 
 \subsection{Router Selection Algorithm}
 Recall from previous sections that there are a total of 440 LNET routers where
@@ -36,14 +36,14 @@ three routers assigned to the input client ($C$): one primary and two backup
 routers. 
 
 The fine-grained routing algorithm consists of two steps. The first step
-(line~\ref{first:begin}--\ref{first:end}) is to choose the sub-group whose
+(lines~\ref{first:begin}--\ref{first:end}) is to choose the sub-group whose
 Y-coordinates fall within the close range of Y-coordinates of the input client,
 $C$. This is because the bandwidth in the Y-direction is limited compared to
 other directions, as discussed earlier. Therefore, it is desirable to minimize
 the traffic in that direction first. 
 
 Once the sub-group is selected, the second step
-(line~\ref{second:begin}--\ref{second:end}) is to return assigned routers from
+(lines~\ref{second:begin}--\ref{second:end}) is to return assigned routers from
 this sub-group. As mentioned earlier, each sub-group consists of 3 routers and
 the algorithm returns a vector of 3 routers. So, all three of them are
 returned, but the one with the lowest distance in X-dimension is assigned as
@@ -114,7 +114,6 @@ that run within a cabinet in vertical direction.
 
 \subsection{LNET Routing}
 
-A quick introduction to LNET routing is helpful to understanding Titan's setup.
 Lustre uses LNET for all communications between clients, routers, and servers.
 Routing allows communication to span multiple network types, as long as one or
 more nodes exist that can ``bridge'' the disjoint networks.  Each unique

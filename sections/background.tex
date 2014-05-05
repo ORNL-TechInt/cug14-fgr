@@ -21,16 +21,16 @@ other, reducing the load on the common SeaStar torus links and avoiding SeaStar
 link saturation. Second, FGR introduced a new LNET routing configuration. This
 new configuration assigned varying weights to LNET routes based on client I/O
 server pairings. Tests showed that with FGR, aggregate performance was boosted
-by 30\%.  Other solutions have since adopted the Fine-Grained routing
+by 30\%.  Other solutions have since adopted the FGR
 techniques, including Cray's Sonexion product \cite{cray-fgr}.
  
-Jaguar was upgraded to Titan in 2012. Like Jaguar, Titan has 18,688 clients.
+Jaguar was upgraded to Titan, a Cray XK7 system, in 2012. Like Jaguar, Titan has 18,688 clients.
 However, each Titan node is augmented with one NVIDIA Kepler GPGPU
 which increased the aggregate installed computational power by more than an
 order of magnitude.  This also increased the I/O requirement. To address this
 need, a new file system called Spider~II was deployed in 2013. Spider~II
 provides a 4x boost in aggregate I/O performance and a 3x increase in data
-storage capacity.
+storage capacity compared to Spider~I.
 
 Spider~II was designed with a similar architecture to its predecessor,
 Spider~I.  20,160 2 TB Near-Line SAS disks are organized in 8+2 RAID 6 sets

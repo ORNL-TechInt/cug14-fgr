@@ -11,7 +11,7 @@ for Spider~II.
 \begin{figure*}[t]
   \begin{center}
     \includegraphics{figures/jaguarplacement}
-    \caption{Jaguar Layout}\label{fig:jaglayout}
+    \caption{Jaguar Router Layout}\label{fig:jaglayout}
   \end{center}
 \end{figure*}
 
@@ -24,17 +24,16 @@ cabinets that contained routers (see Figure \ref{fig:jaglayout}). This resulted
 in a very regular I/O pattern that was prone to congestion if I/O traffic was
 not properly kept localized.
 
-Details about Gemini's architecture and design are available in other
-literature \cite{hoti}.  Additional details and performance characteristics are
-available in a paper titled ``Understanding the Impact of Interconnect Failures
-on System Operation'' \cite{interconnect} presented at CUG 2013.  Jaguar's
-upgrade from Cray's SeaStar interconnect to Gemini significantly changed the
-network's characteristics.  Each Gemini supports two nodes, which effectively
-halved the Y-dimension length.  Additionally, Y-dimension connections are
-comprised of only half the links of X- and Z-dimension connections.  Thus, I/O
-traffic should be limited in the Y-dimension due to its reduced relative
-bandwidth.  This suggests that routing zones should be ``flattened'' into
-``rectangular prisms'' instead of the more traditional cubic zones.
+Jaguar's upgrade from Cray's SeaStar interconnect to Gemini significantly
+changed the network's characteristics.  Details about Gemini's architecture and
+design are available in other literature \cite{hoti}.  Additional details and
+performance characteristics are also available \cite{interconnect}. Each Gemini
+supports two nodes, which effectively halved the Y-dimension length.
+Additionally, Y-dimension connections are comprised of only half the links of
+X- and Z-dimension connections.  Thus, I/O traffic should be limited in the
+Y-dimension due to its reduced relative bandwidth.  This suggests that routing
+zones should be ``flattened'' into ``rectangular prisms'' instead of the more
+traditional cubic zones as was implemented in Spider~I.
 
 Since Gemini uses dimension-ordered-routing, I/O tends to converge to a single
 path as it nears the destination.  Thus, it is important to avoid putting
@@ -101,7 +100,7 @@ the Cray~XK architecture, each service module contains four service nodes.
 Since each service module displaces a compute module, it is important to
 utilize each node.  Ideally, the LNET routers would exist on the same module as
 less bandwidth-intensive nodes (such as a login nodes) to dedicate more
-bandwidth to routing.  This is unfortunately impossible due to the sheer number
+bandwidth to routing.  This is unfortunately impractical due to the sheer number
 of routers required to achieve sufficient bandwidth.
 
 Spider~II has 36 InfiniBand switches that are named based on row and position:
@@ -139,7 +138,7 @@ The final placement map is shown in Figure~\ref{fig:titanlayout}.
 \begin{figure*}[t]
   \begin{center}
     \includegraphics{figures/titanplacement}
-    \caption{Titan Layout}\label{fig:titanlayout}
+    \caption{Titan Router Layout}\label{fig:titanlayout}
   \end{center}
 \end{figure*}
 
