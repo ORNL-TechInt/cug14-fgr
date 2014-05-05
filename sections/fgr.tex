@@ -119,13 +119,13 @@ Lustre uses LNET for all communications between clients, routers, and servers.
 Routing allows communication to span multiple network types, as long as one or
 more nodes exist that can ``bridge'' the disjoint networks.  Each unique
 network is given an identifying name that consists of the network type and an
-arbitrary integer (for example, \textit{o2iblnd0} for the $0^{th}$ InfiniBand
+arbitrary integer (for example, \textit{o2ib0} for the $0^{th}$ InfiniBand
 network or \textit{gni101} for the $101^{st}$ Gemini network).
 
 Each node in an LNET network has a unique Network Identifier (NID) that is in
 the form \textit{identifier@network}.  The InfiniBand Lustre Networking Driver
 (LND) uses the IP-over-IB address as its unique identifier
-(ex.~\textit{10.10.10.101@o2iblnd0}), while the Gemini LND uses its Gemini
+(ex.~\textit{10.10.10.101@o2ib0}), while the Gemini LND uses its Gemini
 network ID (ex.~\textit{4044@gni101}).  It is permissible for a network
 interface to have multiple NIDs assigned to it.  For example, a node with a
 single InfiniBand interface may have NIDs \textit{10.10.10.101@o2ib0},
@@ -166,7 +166,7 @@ Additionally, \textit{gni100} is configured on all clients for metadata and
 Cray DVS traffic.  Lustre metadata traffic uses all 8 metadata routers; it does
 not use fine-grained routing.
 
-The Lustre servers each configure one \textit{o2iblnd} network identifier that
+The Lustre servers each configure one \textit{o2ib} network identifier that
 corresponds to its IB leaf switch.  Routes for all 12 \textit{gni} networks are
 configured through the 12 routers also connected to the same switch.
 

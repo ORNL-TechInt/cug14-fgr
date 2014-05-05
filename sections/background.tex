@@ -5,10 +5,11 @@ all Oak Ridge Leadership Computing Facility (OLCF) resources, in 2008. The
 design was targeted to eliminate data islands, to reduce deployment costs, and
 to increase data availability. The system was connected to Jaguar and other
 OLCF resources through an InfiniBand (IB) DDR network network, named Scalable
-I/O network (SION).  Each storage server was directly connected to two 108 port
-IB aggregation switches.  Network translation services from Cray SeaStar to
-InfiniBand was provided by Lustre Networking (LNET) routers. These routers were
-also directly connected to the same two aggregation switches.    
+I/O network (SION).  Each storage server was connected to a leaf switch that
+was then connected to two 108 port IB core switches.  An aggregration switch
+then connected the core switches.  Network translation services from Cray
+SeaStar to InfiniBand was provided by Lustre Networking (LNET) routers. These
+routers were also directly connected to the same two aggregation switches.    
 
 After deployment, it was discovered that network congestion both at the Cray
 SeaStar and InfiniBand networks were severely limiting aggregate I/O
