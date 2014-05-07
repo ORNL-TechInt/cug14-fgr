@@ -79,11 +79,6 @@ determining an optimal placement algorithm:
   \item[Topological Concerns] \hfill \\
     Routers must be placed to optimize for the topological concerns mentioned
     in Section \ref{sec:topo}.
-  \item[Minimize Cabinet Count] \hfill \\
-    Each cabinet that contains a router module requires a hole to be drilled in
-    the floor to accommodate the cables.
-  \item[Cable Length] \hfill \\
-    Shorter cables are cheaper and easier to manage in the data center.
   \item[Partitionability] \hfill \\
     Occasionally, Titan's 3D torus must be partitioned to facilitate extended
     maintenance activities or testing.  During this situation, it is important to
@@ -91,6 +86,11 @@ determining an optimal placement algorithm:
     node is located in physical columns 0 and 24 (topological columns 0 and 13).
     Thus, routers should be located in a way that minimizes the number of
     columns required to access the entire file system.
+  \item[Minimize Cabinet Count] \hfill \\
+    Each cabinet that contains a router module requires a hole to be drilled in
+    the floor to accommodate the cables.
+  \item[Cable Length] \hfill \\
+    Shorter cables are cheaper and easier to manage in the data center.
 \end{description}
 
 \subsection{Placement Choices}
